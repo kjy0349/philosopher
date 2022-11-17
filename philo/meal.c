@@ -6,7 +6,7 @@
 /*   By: jeykim <jeykim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/10 14:28:36 by jeykim            #+#    #+#             */
-/*   Updated: 2022/11/17 15:52:38 by jeykim           ###   ########.fr       */
+/*   Updated: 2022/11/17 19:06:49 by jeykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	print_thread(t_phil *phl, int chk)
 				phl->tid);
 		}
 		else if (chk == 1)
-			printf("%d has taken a fork\n", phl->tid);
+			printf("%lld %d has taken a fork\n", get_time() - phl->start_time, phl->tid);
 	}
 	pthread_mutex_unlock(phl->print_lock);
 }
@@ -59,7 +59,7 @@ int	die_chk(int i, t_phil *phl, int cnt)
 {
 	if (*(phl->is_die) == 1)
 		return (1);
-	if (get_time() - (phl->thk_time) > phl->t_die)
+	if (get_time() - (phl->eat_time) > phl->t_die)
 	{
 		*(phl->is_die) = 1;
 		if (cnt == 1)
@@ -83,61 +83,73 @@ int	die_chk(int i, t_phil *phl, int cnt)
 
 int	pickup(int i, t_phil *phl)
 {
-	if (die_chk(i, phl, 0))
-		return (-1);
-	pthread_mutex_lock(&(phl->forks[leftof(i, phl)]));
-	print_thread(phl, 1);
-	if (die_chk(i, phl, 1))
-		return (-1);
-	pthread_mutex_lock(&(phl->forks[rightof(i, phl)]));
-	print_thread(phl, 1);
-	if (die_chk(i, phl, 2))
-		return (-1);
-	usleep(10000);
-	if (die_chk(i, phl, 0))
-		return (-1);
-	pthread_mutex_lock(&(phl->forks[leftof(i, phl)]));
-	print_thread(phl, 1);
-	if (die_chk(i, phl, 1))
-		return (-1);
-	pthread_mutex_lock(&(phl->forks[rightof(i, phl)]));
-	print_thread(phl, 1);
-	if (die_chk(i, phl, 2))
-		return (-1);
-	return (1);
+	if (die_chk(phl->tid, phl, 0))
+		return (1);
+	if (i % 2 == 1 && i != phl->num)
+	{
+		pthread_mutex_lock(&(phl->forks[leftof(i, phl)]));
+		print_thread(phl, 1);
+		if (die_chk(phl->tid, phl, 1))
+			return (1);
+		pthread_mutex_lock(&(phl->forks[rightof(i, phl)]));
+		print_thread(phl, 1);
+		if (die_chk(phl->tid, phl, 3))
+			return (1);
+	}
+	else
+	{
+		pthread_mutex_lock(&(phl->forks[rightof(i, phl)]));
+		print_thread(phl, 1);
+		if (die_chk(phl->tid, phl, 2))
+			return (1);
+		pthread_mutex_lock(&(phl->forks[leftof(i, phl)]));
+		print_thread(phl, 1);
+		if (die_chk(phl->tid, phl, 3))
+			return (1);
+	}
+	return (0);
 }
 
-void	think(t_phil *phl)
+int	think(t_phil *phl)
 {
 	phl->state = 0;
 	print_thread(phl, 0);
-	phl->thk_time = get_time();
+	if (die_chk(phl->tid, phl, 0))
+		return (1);
+	return (0);
 }
 
-void	eat(t_phil *phl)
+int	eat(t_phil *phl)
 {
 	phl->state = 2;
+	phl->eat_time = get_time();
 	print_thread(phl, 0);
 	usleep(phl->t_eat * 1000);
+	if (die_chk(phl->tid, phl, 0))
+		return (1);
+	return (0);
 }
 
 void	putdown(int i, t_phil *phl)
 {
 	if (i % 2 == 1)
 	{
-		pthread_mutex_unlock(&(phl->forks[leftof(i, phl)]));
 		pthread_mutex_unlock(&(phl->forks[rightof(i, phl)]));
+		pthread_mutex_unlock(&(phl->forks[leftof(i, phl)]));
 	}
 	else
 	{
-		pthread_mutex_unlock(&(phl->forks[rightof(i, phl)]));
 		pthread_mutex_unlock(&(phl->forks[leftof(i, phl)]));
+		pthread_mutex_unlock(&(phl->forks[rightof(i, phl)]));
 	}
 }
 
-void	start_sleep(t_phil *phl)
+int	start_sleep(t_phil *phl)
 {
 	phl->state = 1;
 	print_thread(phl, 0);
 	usleep(phl->t_slp * 1000);
+	if (die_chk(phl->tid, phl, 0))
+		return (1);
+	return (0);
 }

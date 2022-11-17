@@ -6,7 +6,7 @@
 /*   By: jeykim <jeykim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 09:52:14 by jeykim            #+#    #+#             */
-/*   Updated: 2022/11/17 15:53:13 by jeykim           ###   ########.fr       */
+/*   Updated: 2022/11/17 19:17:55 by jeykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,16 +42,19 @@ void	philo(void *ptr)
 	t_phil	*phl;
 
 	phl = (t_phil *)ptr;
-	if (phl->tid % 2)
-		usleep(10000);
+	if (phl->tid % 2 == 1)
+		usleep(100);
 	while (*(phl->is_die) == 0)
 	{
-		think(phl);
-		if (pickup(phl->tid, phl) == -1)
+		if (think(phl))
 			return ;
-		eat(phl);
+		if (pickup(phl->tid, phl))
+			return ;
+		if (eat(phl))
+			return ;
 		putdown(phl->tid, phl);
-		start_sleep(phl);
+		if (start_sleep(phl))
+			return ;
 	}
 }
 
@@ -74,6 +77,7 @@ void	init_phil(long long time, t_info *info, t_phil *phl, int i)
 	phl->start_time = time;
 	phl->is_die = &(info->is_die);
 	phl->forks = info->forks;
+	phl->eat_time = time;
 	i = 0;
 	while (i < (info->inputs)[0])
 	{
@@ -102,15 +106,16 @@ void	main_philo(void *ptr)
 	while (i <= (info->inputs)[0])
 	{
 		init_phil(time, info, &(phl[i - 1]), i);
-		pthread_create(&phl->thread, NULL, (void *)philo, &(phl[i - 1]));
+		pthread_create(&(phl[i - 1].thread), NULL, (void *)philo, &(phl[i - 1]));
 		i++;
 	}
 	i = 1;
 	while (i <= (info->inputs)[0])
 	{
-		pthread_join(phl->thread, NULL);
+		pthread_join((phl[i - 1]).thread, NULL);
 		i++;
 	}
+	return ;
 }
 
 // 0 : THINK, 1 : SLEEP, 2 : EATING

@@ -6,7 +6,7 @@
 /*   By: jeykim <jeykim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 09:52:26 by jeykim            #+#    #+#             */
-/*   Updated: 2022/11/17 15:05:00 by jeykim           ###   ########.fr       */
+/*   Updated: 2022/11/17 18:55:15 by jeykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ typedef struct thr
 	int				t_slp;
 	int				state;
 	long long		start_time;
-	long long		thk_time;
+	long long		eat_time;
 	int				*is_die;
 	int				num;
 	pthread_t		thread;
@@ -48,10 +48,10 @@ unsigned int	mrand(void);
 int				pickup(int i, t_phil *phl);
 void			putdown(int i, t_phil *phl);
 long long		get_time(void);
-void			think(t_phil *phl);
-void			eat(t_phil *phl);
+int				think(t_phil *phl);
+int				eat(t_phil *phl);
 void			putdown(int i, t_phil *phl);
 int				ft_atoi(const char *str);
-void			start_sleep(t_phil *phl);
+int				start_sleep(t_phil *phl);
 
 #endif
