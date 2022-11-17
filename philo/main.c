@@ -6,7 +6,7 @@
 /*   By: jeykim <jeykim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 09:52:14 by jeykim            #+#    #+#             */
-/*   Updated: 2022/11/11 00:12:57 by jeykim           ###   ########.fr       */
+/*   Updated: 2022/11/17 15:53:13 by jeykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,16 +23,18 @@ unsigned int	mrand(void)
 	return ((unsigned int)(next / 65536) % 32768);
 }
 
-void	init_input(int argc, int *inputs, char *argv[])
+int	*init_input(int argc, char *argv[])
 {
+	int	*inputs;
+
+	inputs = (int *)malloc(sizeof(int) * (argc - 1));
 	inputs[0] = ft_atoi(argv[1]);
 	inputs[1] = ft_atoi(argv[2]);
 	inputs[2] = ft_atoi(argv[3]);
 	inputs[3] = ft_atoi(argv[4]);
 	if (argc == 6)
 		inputs[4] = ft_atoi(argv[5]);
-	else
-		inputs[4] = -1;
+	return (inputs);
 }
 
 void	philo(void *ptr)
@@ -40,13 +42,20 @@ void	philo(void *ptr)
 	t_phil	*phl;
 
 	phl = (t_phil *)ptr;
-	while (1)
+	if (phl->tid % 2)
+		usleep(10000);
+	while (*(phl->is_die) == 0)
 	{
-		pickup(phl->tid, phl);
+		think(phl);
+		if (pickup(phl->tid, phl) == -1)
+			return ;
+		eat(phl);
+		putdown(phl->tid, phl);
+		start_sleep(phl);
 	}
 }
 
-long long get_time(void)
+long long	get_time(void)
 {
 	struct timeval	time;
 
@@ -63,7 +72,6 @@ void	init_phil(long long time, t_info *info, t_phil *phl, int i)
 	phl->t_slp = info->inputs[3];
 	phl->state = 0;
 	phl->start_time = time;
-	phl->is_die = 0;
 	phl->is_die = &(info->is_die);
 	phl->forks = info->forks;
 	i = 0;
@@ -81,7 +89,6 @@ void	main_philo(void *ptr)
 {
 	int				i;
 	long long		time;
-	pthread_t		tid;
 	t_info			*info;
 	t_phil			*phl;
 
@@ -89,18 +96,19 @@ void	main_philo(void *ptr)
 	phl = (t_phil *)malloc(sizeof(t_phil) * (info->inputs)[0]);
 	info->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * \
 	(info->inputs)[0]);
-	i = 0;
+	i = 1;
 	time = get_time();
+	info->is_die = 0;
 	while (i <= (info->inputs)[0])
 	{
-		init_phil(time, info, &(phl[i]), i);
-		pthread_create(&tid, NULL, (void *)philo, &(phl[i]));
+		init_phil(time, info, &(phl[i - 1]), i);
+		pthread_create(&phl->thread, NULL, (void *)philo, &(phl[i - 1]));
 		i++;
 	}
-	i = 0;
+	i = 1;
 	while (i <= (info->inputs)[0])
 	{
-		pthread_join(tid, NULL);
+		pthread_join(phl->thread, NULL);
 		i++;
 	}
 }
@@ -108,13 +116,12 @@ void	main_philo(void *ptr)
 // 0 : THINK, 1 : SLEEP, 2 : EATING
 int	main(int argc, char *argv[])
 {
-	int			inputs[6];
 	pthread_t	m_tid;
 	t_info		info;
 
 	if (argc != 6 && argc != 5)
 		return (0);
-	init_input(argc, inputs, argv);
+	info.inputs = init_input(argc, argv);
 	pthread_create(&m_tid, NULL, (void *)main_philo, (void *)&info);
 	pthread_join(m_tid, NULL);
 	return (0);
