@@ -6,7 +6,7 @@
 /*   By: jeyoung <jeyoung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 09:52:26 by jeykim            #+#    #+#             */
-/*   Updated: 2022/11/22 21:19:07 by jeyoung          ###   ########.fr       */
+/*   Updated: 2022/11/23 00:00:52 by jeyoung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ typedef struct info
 	int				must_eat;
 	int				chk_meal;
 	int				over;
-	int				start;
+	long long		start;
 	pthread_mutex_t	*death;
 	pthread_mutex_t	*forks;
 }	t_info;
@@ -40,8 +40,8 @@ typedef struct thr
 	int				tid;
 	int				is_die;
 	int				eat_num;
-	int				t_start;
-	int				meal;
+	long long		t_start;
+	long long		meal;
 	pthread_t		thread;
 	pthread_mutex_t	*left;
 	pthread_mutex_t	*right;
@@ -52,8 +52,14 @@ int			ft_atoi(const char *str);
 int			error_free(char *str, t_info *info, t_phil *philo, int malloc);
 int			init_input(t_info *info, int argc, char *argv[]);
 void		init_philo(t_info *info, t_phil *philo);
-void		init_thread(t_info *info, t_phil *philo);
+int			init_thread(t_info *info, t_phil *philo);
 long long	get_time(void);
 int			philo_start(t_info *info);
+int			ft_usleep(int time);
+int			philo_start(t_info *info);
+void		*philo_loop(void *job);
+void		check_thread(t_info *info, t_phil *philo);
+void		print_state(t_phil *philo, char *str);
+void		thread_end(t_info *info, t_phil *philo);
 
 #endif

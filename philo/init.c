@@ -6,13 +6,13 @@
 /*   By: jeyoung <jeyoung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 18:02:35 by jeyoung           #+#    #+#             */
-/*   Updated: 2022/11/22 21:18:32 by jeyoung          ###   ########.fr       */
+/*   Updated: 2022/11/23 00:21:02 by jeyoung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-void	init_thread(t_info *info, t_phil *philo)
+int	init_thread(t_info *info, t_phil *philo)
 {
 	int	i;
 
@@ -20,7 +20,8 @@ void	init_thread(t_info *info, t_phil *philo)
 	while (i < info->num_philo)
 	{
 		philo[i].right = philo[(i + 1) % info->num_philo].left;
-		if (pthread_create(&philo[i].tid, NULL, &philo_loop, &philo[i]) == -1)
+		if (pthread_create(&philo[i].thread, NULL, \
+		&philo_loop, &philo[i]) == -1)
 			return (error_free("Error\n", info, philo, 1));
 		i++;
 	}
@@ -33,6 +34,7 @@ void	init_thread(t_info *info, t_phil *philo)
 		i++;
 	}
 	info->ready = 1;
+	return (0);
 }
 
 void	init_philo(t_info *info, t_phil *philo)
@@ -50,6 +52,7 @@ void	init_philo(t_info *info, t_phil *philo)
 		philo[i].info = info;
 		philo[i].left = &info->forks[i];
 		philo[i].right = 0;
+		i++;
 	}
 }
 
@@ -60,10 +63,10 @@ int	init_mutexes(t_info *info)
 	i = 0;
 	info->death = 0;
 	info->forks = 0;
-	info->death = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t));
+	info->death = malloc(sizeof(pthread_mutex_t));
 	if (!info->death)
 		return (error_free("Error\n", info, 0, 1));
-	info->forks = (pthread_mutex_t *)malloc(sizeof(pthread_mutex_t) * \
+	info->forks = malloc(sizeof(pthread_mutex_t) * \
 	info->num_philo);
 	if (!info->forks)
 		return (error_free("Error\n", info, 0, 1));
@@ -98,7 +101,7 @@ int	init_input(t_info *info, int argc, char *argv[])
 	}
 	info->over = 0;
 	if (info->num_philo > 0)
-		mutex = init_params_mutex(info);
-	return (mutex || info->num_philo <= 0 || info->t_die <= 0 || info->t_eat \
-	|| info->t_slp || info->must_eat == 0);
+		mutex = init_mutexes(info);
+	return (mutex || info->num_philo <= 0 || info->t_die <= 0 \
+	|| info->t_eat <= 0 || info->t_slp <= 0 || info->must_eat == 0);
 }

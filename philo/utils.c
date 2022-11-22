@@ -6,18 +6,28 @@
 /*   By: jeyoung <jeyoung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/17 00:16:12 by jeyoung           #+#    #+#             */
-/*   Updated: 2022/11/22 21:17:27 by jeyoung          ###   ########.fr       */
+/*   Updated: 2022/11/22 23:54:44 by jeyoung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
+
+int	ft_usleep(int time)
+{
+	long long	start_time;
+
+	start_time = get_time();
+	while ((get_time() - start_time) < time)
+		usleep(150);
+	return (1);
+}
 
 long long	get_time(void)
 {
 	struct timeval	now;
 
 	gettimeofday(&now, NULL);
-	return ((long long)(now.tv_sec * 1000) + (long long)(now.tv_usec / 1000));
+	return ((now.tv_sec * 1000) + (now.tv_usec / 1000));
 }
 
 int	is_space(char c)
