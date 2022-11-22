@@ -1,14 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_atoi.c                                          :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeykim <jeykim@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jeyoung <jeyoung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/17 00:16:12 by jeyoung           #+#    #+#             */
-/*   Updated: 2022/11/10 23:50:17 by jeykim           ###   ########.fr       */
+/*   Updated: 2022/11/22 21:17:27 by jeyoung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "main.h"
+
+long long	get_time(void)
+{
+	struct timeval	now;
+
+	gettimeofday(&now, NULL);
+	return ((long long)(now.tv_sec * 1000) + (long long)(now.tv_usec / 1000));
+}
 
 int	is_space(char c)
 {
@@ -46,4 +56,19 @@ int	ft_atoi(const char *str)
 		i++;
 	}
 	return ((int)(return_num * sign));
+}
+
+int	error_free(char *str, t_info *info, t_phil *philo, int malloc)
+{
+	if (malloc)
+	{
+		if (info->num_philo > 0 && info->death)
+			free(info->death);
+		if (info->num_philo > 0 && info->forks)
+			free(info->forks);
+		if (philo)
+			free(philo);
+	}
+	printf("%s", str);
+	return (1);
 }

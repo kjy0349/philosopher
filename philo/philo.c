@@ -1,26 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeyoung <jeyoung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/11/06 09:52:14 by jeykim            #+#    #+#             */
-/*   Updated: 2022/11/22 21:18:42 by jeyoung          ###   ########.fr       */
+/*   Created: 2022/11/21 19:06:02 by jeyoung           #+#    #+#             */
+/*   Updated: 2022/11/22 21:19:19 by jeyoung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.h"
 
-
-// 0 : THINK, 1 : SLEEP, 2 : EATING
-int	main(int argc, char *argv[])
+int	philo_start(t_info *info)
 {
-	t_info		info;
+	t_phil	*philo;
 
-	if (argc != 6 && argc != 5 || init_input(&info, argc, argv))
+	philo = (t_phil *)malloc(sizeof(t_phil) * info->num_philo);
+	if (!philo)
 		return (1);
-	if (philo_start(&info))
-		return (1);
-	return (0);
+	init_philo(info, philo);
+	init_thread(info, philo);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeykim <jeykim@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: jeyoung <jeyoung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 09:52:26 by jeykim            #+#    #+#             */
-/*   Updated: 2022/11/17 18:55:15 by jeykim           ###   ########.fr       */
+/*   Updated: 2022/11/22 21:19:07 by jeyoung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,36 +22,38 @@
 
 typedef struct info
 {
-	int				*inputs;
+	int				num_philo;
+	int				ready;
+	int				t_die;
+	int				t_eat;
+	int				t_slp;
+	int				must_eat;
+	int				chk_meal;
+	int				over;
+	int				start;
+	pthread_mutex_t	*death;
 	pthread_mutex_t	*forks;
-	pthread_mutex_t	print_lock;
-	int				is_die;	
 }	t_info;
 
 typedef struct thr
 {
 	int				tid;
-	int				t_die;
-	int				t_eat;
-	int				t_slp;
-	int				state;
-	long long		start_time;
-	long long		eat_time;
-	int				*is_die;
-	int				num;
+	int				is_die;
+	int				eat_num;
+	int				t_start;
+	int				meal;
 	pthread_t		thread;
-	pthread_mutex_t	*print_lock;
-	pthread_mutex_t	*forks;
+	pthread_mutex_t	*left;
+	pthread_mutex_t	*right;
+	t_info			*info;
 }	t_phil;
 
-unsigned int	mrand(void);
-int				pickup(int i, t_phil *phl);
-void			putdown(int i, t_phil *phl);
-long long		get_time(void);
-int				think(t_phil *phl);
-int				eat(t_phil *phl);
-void			putdown(int i, t_phil *phl);
-int				ft_atoi(const char *str);
-int				start_sleep(t_phil *phl);
+int			ft_atoi(const char *str);
+int			error_free(char *str, t_info *info, t_phil *philo, int malloc);
+int			init_input(t_info *info, int argc, char *argv[]);
+void		init_philo(t_info *info, t_phil *philo);
+void		init_thread(t_info *info, t_phil *philo);
+long long	get_time(void);
+int			philo_start(t_info *info);
 
 #endif
