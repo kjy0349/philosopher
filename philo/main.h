@@ -6,7 +6,7 @@
 /*   By: jeyoung <jeyoung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 09:52:26 by jeykim            #+#    #+#             */
-/*   Updated: 2022/11/23 00:00:52 by jeyoung          ###   ########.fr       */
+/*   Updated: 2022/11/23 20:57:22 by jeyoung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <pthread.h>
 # include <string.h>
 
-typedef struct info
+typedef struct s_info
 {
 	int				num_philo;
 	int				ready;
@@ -35,7 +35,7 @@ typedef struct info
 	pthread_mutex_t	*forks;
 }	t_info;
 
-typedef struct thr
+typedef struct s_thr
 {
 	int				tid;
 	int				is_die;

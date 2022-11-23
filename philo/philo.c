@@ -6,7 +6,7 @@
 /*   By: jeyoung <jeyoung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 19:06:02 by jeyoung           #+#    #+#             */
-/*   Updated: 2022/11/23 00:20:51 by jeyoung          ###   ########.fr       */
+/*   Updated: 2022/11/23 22:06:39 by jeyoung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ void	*philo_loop(void *job)
 	t_phil	*philo;
 
 	philo = (t_phil *)job;
-	while (!philo->info)
+	while (!philo->info->ready)
 		continue ;
-	if (philo->tid % 2 == 1)
+	if (philo->tid % 2 == 0)
 		ft_usleep(philo->info->t_eat * 0.9 + 1);
 	while (!philo->info->over)
 	{

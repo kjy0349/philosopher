@@ -6,7 +6,7 @@
 /*   By: jeyoung <jeyoung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 18:02:35 by jeyoung           #+#    #+#             */
-/*   Updated: 2022/11/23 00:21:02 by jeyoung          ###   ########.fr       */
+/*   Updated: 2022/11/23 21:31:50 by jeyoung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,22 +16,20 @@ int	init_thread(t_info *info, t_phil *philo)
 {
 	int	i;
 
-	i = 0;
-	while (i < info->num_philo)
+	i = -1;
+	while (++i < info->num_philo)
 	{
 		philo[i].right = philo[(i + 1) % info->num_philo].left;
 		if (pthread_create(&philo[i].thread, NULL, \
 		&philo_loop, &philo[i]) == -1)
 			return (error_free("Error\n", info, philo, 1));
-		i++;
 	}
-	i = 0;
+	i = -1;
 	info->start = get_time();
-	while (i < info->num_philo)
+	while (++i < info->num_philo)
 	{
 		philo[i].t_start = info->start;
 		philo[i].meal = info->start;
-		i++;
 	}
 	info->ready = 1;
 	return (0);
@@ -60,7 +58,7 @@ int	init_mutexes(t_info *info)
 {
 	int	i;
 
-	i = 0;
+	i = -1;
 	info->death = 0;
 	info->forks = 0;
 	info->death = malloc(sizeof(pthread_mutex_t));
@@ -72,11 +70,10 @@ int	init_mutexes(t_info *info)
 		return (error_free("Error\n", info, 0, 1));
 	if (pthread_mutex_init(info->death, NULL) == -1)
 		return (error_free("Error\n", info, 0, 1));
-	while (i++ < info->num_philo)
+	while (++i < info->num_philo)
 	{
 		if (pthread_mutex_init(&info->forks[i], NULL) == -1)
 			return (error_free("Error\n", info, 0, 1));
-		i++;
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: jeyoung <jeyoung@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/17 00:16:12 by jeyoung           #+#    #+#             */
-/*   Updated: 2022/11/22 23:54:44 by jeyoung          ###   ########.fr       */
+/*   Updated: 2022/11/23 21:53:24 by jeyoung          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,8 @@ int	ft_atoi(const char *str)
 		return_num = tmp;
 		i++;
 	}
+	if (sign < 0)
+		return (0);
 	return ((int)(return_num * sign));
 }
 
