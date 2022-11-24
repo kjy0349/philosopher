@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jeyoung <jeyoung@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jeykim <jeykim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/17 00:16:12 by jeyoung           #+#    #+#             */
-/*   Updated: 2022/11/23 21:53:24 by jeyoung          ###   ########.fr       */
+/*   Updated: 2022/11/24 15:32:52 by jeykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	ft_atoi(const char *str)
 	if (str[i] == '+' || str[i] == '-')
 	{
 		if (str[i] == '-')
-			sign = -1;
+			sign = 0;
 		i++;
 	}
 	while (str[i] >= '0' && str[i] <= '9')
@@ -65,8 +65,6 @@ int	ft_atoi(const char *str)
 		return_num = tmp;
 		i++;
 	}
-	if (sign < 0)
-		return (0);
 	return ((int)(return_num * sign));
 }
 
