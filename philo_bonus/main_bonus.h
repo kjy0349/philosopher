@@ -6,7 +6,7 @@
 /*   By: jeykim <jeykim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 09:52:26 by jeykim            #+#    #+#             */
-/*   Updated: 2022/11/24 17:26:24 by jeykim           ###   ########.fr       */
+/*   Updated: 2022/11/24 19:57:06 by jeykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <sys/time.h>
-# include <sys/stat.h>
 # include <pthread.h>
 # include <string.h>
 # include <semaphore.h>
