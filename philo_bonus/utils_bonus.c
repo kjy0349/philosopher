@@ -6,11 +6,11 @@
 /*   By: jeykim <jeykim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/17 00:16:12 by jeyoung           #+#    #+#             */
-/*   Updated: 2022/11/24 15:49:48 by jeykim           ###   ########.fr       */
+/*   Updated: 2022/11/24 17:18:51 by jeykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "main.h"
+#include "main_bonus.h"
 
 int	ft_usleep(int time)
 {
@@ -70,12 +70,12 @@ int	ft_atoi(const char *str)
 
 int	error_free(char *str, t_info *info, t_phil *philo, int malloc)
 {
+	sem_close(info->death);
+	sem_unlink("/death");
+	sem_close(info->forks);
+	sem_unlink("/fork");
 	if (malloc)
 	{
-		if (info->num_philo > 0 && info->death)
-			free(info->death);
-		if (info->num_philo > 0 && info->forks)
-			free(info->forks);
 		if (philo)
 			free(philo);
 	}

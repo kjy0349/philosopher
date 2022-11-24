@@ -1,27 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philo.c                                            :+:      :+:    :+:   */
+/*   philo_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeykim <jeykim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 19:06:02 by jeyoung           #+#    #+#             */
-/*   Updated: 2022/11/24 17:33:11 by jeykim           ###   ########.fr       */
+/*   Updated: 2022/11/24 17:44:07 by jeykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "main.h"
+#include "main_bonus.h"
 
 void	print_state(t_phil *philo, char *str)
 {
-	pthread_mutex_lock(philo->info->death);
+	sem_wait(philo->info->death);
 	if (philo->info->over)
 	{
-		pthread_mutex_unlock(philo->info->death);
+		sem_post(philo->info->death);
 		return ;
 	}
 	printf("%lldms %d %s\n", get_time() - philo->t_start, philo->tid, str);
-	pthread_mutex_unlock(philo->info->death);
+	sem_post(philo->info->death);
 }
 
 void	sleep_think(t_phil *philo)
@@ -33,23 +33,23 @@ void	sleep_think(t_phil *philo)
 
 void	eating(t_phil *philo)
 {
-	pthread_mutex_lock(philo->left);
+	sem_wait(philo->info->forks);
 	print_state(philo, "has taken a fork");
-	pthread_mutex_lock(philo->right);
+	sem_wait(philo->info->forks);
 	print_state(philo, "has taken a fork");
 	philo->meal = get_time();
 	print_state(philo, "is eating");
 	ft_usleep(philo->info->t_eat);
 	philo->eat_num++;
-	pthread_mutex_unlock(philo->left);
-	pthread_mutex_unlock(philo->right);
+	sem_post(philo->info->forks);
+	sem_post(philo->info->forks);
 }
 
-void	*philo_loop(void *job)
+void	*philo_loop(void *ptr)
 {
 	t_phil	*philo;
 
-	philo = (t_phil *)job;
+	philo = (t_phil *)ptr;
 	while (!philo->info->ready)
 		continue ;
 	if (philo->tid % 2 == 0)
@@ -64,15 +64,12 @@ void	*philo_loop(void *job)
 
 int	philo_start(t_info *info)
 {
-	t_phil	*philo;
-
-	philo = malloc(sizeof(t_phil) * info->num_philo);
-	if (!philo)
+	info->philo = malloc(sizeof(t_phil) * info->num_philo);
+	if (!info->philo)
 		return (1);
-	init_philo(info, philo);
-	if (init_thread(info, philo))
+	init_philo(info, info->philo);
+	if (init_thread(info, info->philo))
 		return (1);
-	check_thread(info, philo);
-	thread_end(info, philo);
+	thread_end(info, info->philo);
 	return (0);
 }

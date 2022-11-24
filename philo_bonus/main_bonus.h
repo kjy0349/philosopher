@@ -1,24 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.h                                             :+:      :+:    :+:   */
+/*   main_bonus.h                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeykim <jeykim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 09:52:26 by jeykim            #+#    #+#             */
-/*   Updated: 2022/11/24 17:11:27 by jeykim           ###   ########.fr       */
+/*   Updated: 2022/11/24 17:26:24 by jeykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MAIN_H
-# define MAIN_H
+#ifndef MAIN_BONUS_H
+# define MAIN_BONUS_H
 
 # include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
 # include <sys/time.h>
+# include <sys/stat.h>
 # include <pthread.h>
 # include <string.h>
+# include <semaphore.h>
 
 typedef struct s_info
 {
@@ -31,8 +33,9 @@ typedef struct s_info
 	int				chk_meal;
 	int				over;
 	long long		start;
-	pthread_mutex_t	*death;
-	pthread_mutex_t	*forks;
+	sem_t			*death;
+	sem_t			*forks;
+	void			*philo;
 }	t_info;
 
 typedef struct s_thr
@@ -43,8 +46,6 @@ typedef struct s_thr
 	long long		t_start;
 	long long		meal;
 	pthread_t		thread;
-	pthread_mutex_t	*left;
-	pthread_mutex_t	*right;
 	t_info			*info;
 }	t_phil;
 
@@ -57,8 +58,8 @@ long long	get_time(void);
 int			philo_start(t_info *info);
 int			ft_usleep(int time);
 int			philo_start(t_info *info);
-void		*philo_loop(void *ptr);
-void		check_thread(t_info *info, t_phil *philo);
+void		*philo_loop(void *job);
+void		*check_thread(void *ptr);
 void		print_state(t_phil *philo, char *str);
 void		thread_end(t_info *info, t_phil *philo);
 
