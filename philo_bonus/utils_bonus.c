@@ -6,7 +6,7 @@
 /*   By: jeykim <jeykim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/17 00:16:12 by jeyoung           #+#    #+#             */
-/*   Updated: 2022/11/24 17:18:51 by jeykim           ###   ########.fr       */
+/*   Updated: 2022/11/25 13:10:35 by jeykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int	error_free(char *str, t_info *info, t_phil *philo, int malloc)
 	sem_close(info->death);
 	sem_unlink("/death");
 	sem_close(info->forks);
-	sem_unlink("/fork");
+	sem_unlink("/forks");
 	if (malloc)
 	{
 		if (philo)

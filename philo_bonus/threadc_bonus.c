@@ -6,7 +6,7 @@
 /*   By: jeykim <jeykim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 23:02:50 by jeyoung           #+#    #+#             */
-/*   Updated: 2022/11/24 17:42:50 by jeykim           ###   ########.fr       */
+/*   Updated: 2022/11/25 13:58:39 by jeykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,11 @@ int	philo_die(t_phil *philo, int unlock, int print)
 		sem_post(philo->info->forks);
 		sem_post(philo->info->forks);
 	}
-	if (print)
+	if (print && !philo->info->over)
 	{
 		sem_wait(philo->info->death);
+		philo->info->over = 1;
+		philo->is_die = 1;
 		printf("%lldms %d %s\n", get_time() - philo->t_start, \
 		philo->tid, "is died");
 		sem_post(philo->info->death);
@@ -37,8 +39,6 @@ int	check_death(t_phil *philo)
 	now = get_time() - philo->meal;
 	if (now >= philo->info->t_die)
 	{
-		philo->info->over = 1;
-		philo->is_die = 1;
 		sem_post(philo->info->death);
 		return (philo_die(philo, 1, 1));
 	}
@@ -66,10 +66,13 @@ void	*check_thread(void *ptr)
 		continue ;
 	while (!info->over)
 	{
-		i = -1;
-		while (++i < info->num_philo)
+		i = 0;
+		while (i < info->num_philo)
+		{
 			if (check_death(&philo[i]) || check_meal(philo[i], i))
 				info->over = 1;
+			i++;
+		}
 	}
 	if (info->chk_meal && philo[info->num_philo - 1].eat_num == info->must_eat)
 	{

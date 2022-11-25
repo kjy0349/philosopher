@@ -6,7 +6,7 @@
 #    By: jeykim <jeykim@student.42seoul.kr>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/24 19:37:29 by jeykim            #+#    #+#              #
-#    Updated: 2022/11/24 19:53:58 by jeykim           ###   ########.fr        #
+#    Updated: 2022/11/25 13:54:23 by jeykim           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,4 +38,4 @@ re : fclean all
 bonus : 
 	make all
 
-.PHONY : all clean fclean re .c.o
+.PHONY : all clean fclean re .c.o bonus

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_bonus.c                                      :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jeykim <jeykim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/17 00:16:12 by jeyoung           #+#    #+#             */
-/*   Updated: 2022/11/24 15:49:48 by jeykim           ###   ########.fr       */
+/*   Updated: 2022/11/25 13:06:13 by jeykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,17 +68,27 @@ int	ft_atoi(const char *str)
 	return ((int)(return_num * sign));
 }
 
-int	error_free(char *str, t_info *info, t_phil *philo, int malloc)
+int	error_free(char *str, t_info *info, t_phil *philo, int cnt)
 {
-	if (malloc)
+	int	i;
+
+	i = 0;
+	if (info->num_philo > 0 && info->death)
 	{
-		if (info->num_philo > 0 && info->death)
-			free(info->death);
-		if (info->num_philo > 0 && info->forks)
-			free(info->forks);
-		if (philo)
-			free(philo);
+		pthread_mutex_destroy(info->death);
+		free(info->death);
 	}
+	if (info->num_philo > 0 && info->forks)
+	{
+		while (i < cnt)
+		{
+			pthread_mutex_destroy(&info->forks[i]);
+			i++;
+		}
+		free(info->forks);
+	}
+	if (philo)
+		free(philo);
 	printf("%s", str);
 	return (1);
 }

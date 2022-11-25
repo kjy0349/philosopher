@@ -6,7 +6,7 @@
 /*   By: jeykim <jeykim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 18:02:35 by jeyoung           #+#    #+#             */
-/*   Updated: 2022/11/24 15:20:03 by jeykim           ###   ########.fr       */
+/*   Updated: 2022/11/25 13:52:42 by jeykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	init_thread(t_info *info, t_phil *philo)
 		philo[i].right = philo[(i + 1) % info->num_philo].left;
 		if (pthread_create(&philo[i].thread, NULL, \
 		&philo_loop, &philo[i]) == -1)
-			return (error_free("Error\n", info, philo, 1));
+			return (error_free("Error\n", info, philo, info->num_philo));
 	}
 	i = -1;
 	info->start = get_time();
@@ -43,12 +43,12 @@ void	init_philo(t_info *info, t_phil *philo)
 	while (i < info->num_philo)
 	{
 		philo[i].tid = i + 1;
-		philo[i].is_die = 0;
 		philo[i].eat_num = 0;
 		philo[i].t_start = 0;
 		philo[i].meal = 0;
 		philo[i].info = info;
 		philo[i].left = &info->forks[i];
+		philo[i].is_die = 0;
 		philo[i].right = 0;
 		i++;
 	}
@@ -63,17 +63,17 @@ int	init_mutexes(t_info *info)
 	info->forks = 0;
 	info->death = malloc(sizeof(pthread_mutex_t));
 	if (!info->death)
-		return (error_free("Error\n", info, 0, 1));
+		return (error_free("Error\n", info, 0, 0));
 	info->forks = malloc(sizeof(pthread_mutex_t) * \
 	info->num_philo);
 	if (!info->forks)
-		return (error_free("Error\n", info, 0, 1));
+		return (error_free("Error\n", info, 0, 0));
 	if (pthread_mutex_init(info->death, NULL) == -1)
-		return (error_free("Error\n", info, 0, 1));
+		return (error_free("Error\n", info, 0, 0));
 	while (++i < info->num_philo)
 	{
 		if (pthread_mutex_init(&info->forks[i], NULL) == -1)
-			return (error_free("Error\n", info, 0, 1));
+			return (error_free("Error\n", info, 0, i));
 	}
 	return (0);
 }

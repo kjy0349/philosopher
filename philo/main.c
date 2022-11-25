@@ -6,7 +6,7 @@
 /*   By: jeykim <jeykim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 09:52:14 by jeykim            #+#    #+#             */
-/*   Updated: 2022/11/24 15:53:52 by jeykim           ###   ########.fr       */
+/*   Updated: 2022/11/25 13:16:06 by jeykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,10 @@ int	main(int argc, char *argv[])
 
 	memset(&info, 0, sizeof(info));
 	if ((argc != 6 && argc != 5) || init_input(&info, argc, argv))
+	{
+		printf("Error\n");
 		return (1);
+	}
 	if (philo_start(&info))
 		return (1);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: jeykim <jeykim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/06 09:52:26 by jeykim            #+#    #+#             */
-/*   Updated: 2022/11/24 17:11:27 by jeykim           ###   ########.fr       */
+/*   Updated: 2022/11/25 13:51:16 by jeykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ typedef struct s_thr
 }	t_phil;
 
 int			ft_atoi(const char *str);
-int			error_free(char *str, t_info *info, t_phil *philo, int malloc);
+int			error_free(char *str, t_info *info, t_phil *philo, int cnt);
 int			init_input(t_info *info, int argc, char *argv[]);
 void		init_philo(t_info *info, t_phil *philo);
 int			init_thread(t_info *info, t_phil *philo);

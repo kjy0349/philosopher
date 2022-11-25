@@ -6,7 +6,7 @@
 /*   By: jeykim <jeykim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 19:06:02 by jeyoung           #+#    #+#             */
-/*   Updated: 2022/11/24 17:44:07 by jeykim           ###   ########.fr       */
+/*   Updated: 2022/11/25 13:30:47 by jeykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,8 @@ void	print_state(t_phil *philo, char *str)
 
 void	sleep_think(t_phil *philo)
 {
-	ft_usleep(philo->info->t_slp);
 	print_state(philo, "is sleeping");
+	ft_usleep(philo->info->t_slp);
 	print_state(philo, "is thinking");
 }
 

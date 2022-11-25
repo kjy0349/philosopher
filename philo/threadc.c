@@ -6,7 +6,7 @@
 /*   By: jeykim <jeykim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/22 23:02:50 by jeyoung           #+#    #+#             */
-/*   Updated: 2022/11/24 17:18:38 by jeykim           ###   ########.fr       */
+/*   Updated: 2022/11/25 13:52:15 by jeykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,8 +79,13 @@ void	thread_end(t_info *info, t_phil *philo)
 		i++;
 	}
 	pthread_mutex_destroy(info->death);
-	pthread_mutex_destroy(info->forks);
 	free(info->death);
+	i = 0;
+	while (i < info->num_philo)
+	{
+		pthread_mutex_destroy(&info->forks[i]);
+		i++;
+	}
 	free(info->forks);
 	free(philo);
 }

@@ -6,7 +6,7 @@
 /*   By: jeykim <jeykim@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/21 18:02:35 by jeyoung           #+#    #+#             */
-/*   Updated: 2022/11/24 19:31:48 by jeykim           ###   ########.fr       */
+/*   Updated: 2022/11/25 13:52:32 by jeykim           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,10 @@ void	init_philo(t_info *info, t_phil *philo)
 	while (i < info->num_philo)
 	{
 		philo[i].tid = i + 1;
-		philo[i].is_die = 0;
 		philo[i].eat_num = 0;
 		philo[i].t_start = 0;
 		philo[i].meal = 0;
+		philo[i].is_die = 0;
 		philo[i].info = info;
 		i++;
 	}
